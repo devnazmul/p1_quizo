@@ -1,8 +1,10 @@
 from google import genai
-from dotenv import dotenv_values
-import streamlit as st
-config = dotenv_values(".env")
-client = genai.Client(api_key=config[st.secrets["GEMINI_API_KEY"]])
+from dotenv import load_dotenv
+import os
+
+load_dotenv(".env")
+
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # generate summary
 def generate_summary(notes,language):
