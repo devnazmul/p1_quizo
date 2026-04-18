@@ -1,47 +1,33 @@
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 import os
 
 load_dotenv(".env")
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-model = genai.GenerativeModel("gemini-3-flash-preview")
-
-
-
-def generate_summary(notes, language):
-    prompt = f"""
-    Summarize these notes in an interesting way under 200 words.
-    Language: {language}.
-    Use markdown with headings, highlights, and lists.
-
-    Notes:
-    {notes}
-    """
-    response = model.generate_content(prompt)
+# generate summary
+def generate_summary(notes,language):
+    prompt = f"Summarize this notes in a interesting way under 200 words and use Language: {language}. Give a markdown response with proper heading, highlighting and listing.",
+    response = client.models.generate_content(
+        model = "gemini-3-flash-preview",
+        contents=[prompt,notes]
+    )
     return response.text
 
-def generate_quiz(notes, language, difficulty_level):
-    prompt = f"""
-    Generate a quiz (Multiple Choice Questions) from these notes WITHOUT answers.
-    Language: {language}
-    Difficulty: {difficulty_level}
-    Format: markdown with headings and lists.
-
-    Notes:
-    {notes}
-    """
-    response = model.generate_content(prompt)
+# generate quiz
+def generate_quiz(notes,language,difficulty_level):
+    prompt = f"Generate a quiz based on these notes with no answer. Use Language: {language} and Difficulty Level: {difficulty_level}. Give a markdown response with proper heading, highlighting and listing.",
+    response = client.models.generate_content(
+        model = "gemini-3-flash-preview",
+        contents=[prompt,notes]
+    )
     return response.text
 
 def check_answer(quiz):
-    prompt = f"""
-    Analyze this quiz and check whether the answers are correct.
-    Return markdown with clear sections.
-
-    Quiz:
-    {quiz}
-    """
-    response = model.generate_content(prompt)
+    prompt = f"can you analyze this {quiz}, and check is answes are correct or not. give a markdown response with proper heading, highlighting and listing."
+    response = client.models.generate_content(
+        model = "gemini-3-flash-preview",
+        contents=[prompt]
+    )
     return response.text
