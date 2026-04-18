@@ -17,7 +17,7 @@ def generate_summary(notes,language):
 
 # generate quiz
 def generate_quiz(notes,language,difficulty_level):
-    prompt = f"Generate a quiz based on these notes with no answer. Use Language: {language} and Difficulty Level: {difficulty_level}. Give a markdown response with proper heading, highlighting and listing.",
+    prompt = f"Generate a quiz (Multiple Choice Questions) based on these notes with no answer. Use Language: {language} and Difficulty Level: {difficulty_level}. Give a markdown response with proper heading, highlighting and listing.",
     response = client.models.generate_content(
         model = "gemini-3-flash-preview",
         contents=[prompt,notes]
